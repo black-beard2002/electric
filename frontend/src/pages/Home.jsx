@@ -89,7 +89,7 @@ const Home = () => {
               <img src={logo} className="h-8" alt="Salame Logo" />
               <span className="self-center text-xl font-semibold font-sans sm:text-2xl whitespace-nowrap text-[#4c5c68] dark:text-white">
                 <FontAwesomeIcon icon={faBoltLightning} className="w-5 h-5 " />
-                alame Electric
+                Salame Electric
               </span>
             </a>
             <ul className="flex flex-wrap gap-y-1 items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
