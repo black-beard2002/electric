@@ -12,6 +12,7 @@ import {
 import { useCategoryStore } from "../store/category";
 import { useState } from "react";
 import CustomAlert from "../components/CustomAlert";
+import { useAuthStore } from "../store/auth";
 function Category() {
   const { id } = useParams();
   const { categories,updateCategory } = useCategoryStore();
@@ -19,6 +20,7 @@ function Category() {
   const [isEditing, setIsEditing] = useState(false);
   const [alert, setAlert] = useState(false);
   const [color, setColor] = useState("");
+  const { user,isAuthenticated } = useAuthStore();
   const [message, setMessage] = useState("");
   const [newItem, setNewItem] = useState({
     name: "",
@@ -187,7 +189,7 @@ function Category() {
         <p className="text-2xl font-bold text-zinc-700 dark:text-slate-100 mb-2">
           {category.name} List:
         </p>
-        {isAdmin && (
+        {isAuthenticated && user.username!=="guest" && (
           <div>
             <button
               type="button"

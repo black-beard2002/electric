@@ -32,7 +32,7 @@ const Home = () => {
   }, [fetchCategories]);
 
   const handleCatClick=(id)=>{
-    navigate(`/categories/${id}`)
+    navigate(`/app/categories/${id}`)
   }
 
   return (
@@ -60,7 +60,7 @@ const Home = () => {
           ))}
         </div>
         <button
-          onClick={() => navigate("/categories")}
+          onClick={() => navigate("/app/categories")}
           className="mx-auto mt-3 p-2 rounded-lg bg-[#FFD700] hover:bg-[#ffe23d] text-white inline-flex gap-2 items-center justify-center"
         >
           All Categories

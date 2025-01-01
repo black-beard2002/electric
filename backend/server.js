@@ -5,7 +5,7 @@ import cors from  "cors";
 
 import { connectDB } from "./config/db.js";
 
-import productRoutes from "./routes/category.route.js";
+import appRoutes from "./routes/routes.js";
 
 dotenv.config();
 
@@ -17,7 +17,7 @@ const __dirname = path.resolve();
 app.use(express.json()); // auto transform body data to json format
 
 app.use(cors());
-app.use("/api/categories", productRoutes);
+app.use("/api", appRoutes);
 
 if (process.env.NODE_ENV === "production") {
 	app.use(express.static(path.join(__dirname, "/frontend/dist")));

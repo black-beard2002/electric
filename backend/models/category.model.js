@@ -37,6 +37,6 @@ const categorySchema = new mongoose.Schema(
   }
 );
 
-const Category = mongoose.model("Category", categorySchema); //mongoose will pluralize the name Product as products in the db.
+const Category = mongoose.model("Category", categorySchema); //mongoose will pluralize the name Category as categories in the salame_electric db.
 
 export default Category;

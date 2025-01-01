@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faImage,
@@ -9,9 +9,12 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useCategoryStore } from "../store/category";
 import CustomAlert from "../components/CustomAlert";
+import { useAuthStore } from "../store/auth";
+
 function Categories() {
   const [category, setCategory] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const { isAuthenticated, user } = useAuthStore();
   const [alert, setAlert] = useState(false);
   const [color, setColor] = useState("");
   const [message, setMessage] = useState("");
@@ -21,29 +24,38 @@ function Categories() {
     image: "",
   });
   const navigate = useNavigate();
-  const isAdmin = true;
+
+  // Access categories directly from the store
+  const { categories, createCategory,fetchCategories } = useCategoryStore();
+ useEffect((()=>{
+  fetchCategories()
+ }),[fetchCategories])
+
   const handleCatClick = (catID) => {
-    navigate(`/categories/${catID}`);
+    navigate(`/app/categories/${catID}`);
   };
-  const { categories, createCategory } = useCategoryStore();
 
   const handleNewCategory = async (e) => {
     e.preventDefault();
     const { success } = await createCategory(newCategory);
     if (success) {
       setAlert(true);
-      setColor("green-500")
-      setMessage("Category Added !")
-      setTimeout(() => {setAlert(false)}, 2000);
-    }
-    else{
+      setColor("green-500");
+      setMessage("Category Added !");
+      setTimeout(() => {
+        setAlert(false);
+      }, 2000);
+    } else {
       setAlert(true);
-      setColor("red-500")
-      setMessage("Failed to Category!")
-      setTimeout(() => {setAlert(false)}, 2000);
+      setColor("red-500");
+      setMessage("Failed to Add Category!");
+      setTimeout(() => {
+        setAlert(false);
+      }, 2000);
     }
     setIsEditing(false);
   };
+
   return (
     <div className="p-4 flex-1 bg-gray-50 dark:bg-gray-700">
       {alert && <CustomAlert message={message} color={color} />}
@@ -122,7 +134,7 @@ function Categories() {
           className="bg-white text-zinc-800 text-md rounded-lg p-1 w-full focus:outline-none"
         />
       </div>
-      {isAdmin && (
+      {isAuthenticated && user.username !== "guest" && (
         <div>
           <button
             type="button"

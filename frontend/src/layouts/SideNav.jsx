@@ -11,13 +11,15 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import logo from "../assets/logo.svg";
+import { useAuthStore } from "../store/auth";
 import { faReadme, faSalesforce } from "@fortawesome/free-brands-svg-icons";
 import { faSun } from "@fortawesome/free-solid-svg-icons/faSun";
 function SideNav() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-const location = "https://maps.app.goo.gl/Q11gmmDWxdkkQtKx5"
+  const { isAuthenticated, user, logout } = useAuthStore();
+  const location = "https://maps.app.goo.gl/Q11gmmDWxdkkQtKx5";
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -25,10 +27,12 @@ const location = "https://maps.app.goo.gl/Q11gmmDWxdkkQtKx5"
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  const handleLogout = () => {
+    logout();
+  };
   // Ref for the sidebar container
   const sidebarRef = useRef(null);
-  const adminName = "Khalil salemeh"
-  const isAdmin=false
   // Handle clicks outside the sidebar
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -82,7 +86,11 @@ const location = "https://maps.app.goo.gl/Q11gmmDWxdkkQtKx5"
                   alt="FlowBite Logo"
                 />
                 <span className="self-center text-xl font-semibold font-sans sm:text-2xl whitespace-nowrap text-[#4c5c68] dark:text-white">
-                  <FontAwesomeIcon icon={faBoltLightning} className="w-5 h-5 "/>Salame Electric
+                  <FontAwesomeIcon
+                    icon={faBoltLightning}
+                    className="w-5 h-5 "
+                  />
+                  Salame Electric
                 </span>
               </a>
             </div>
@@ -90,40 +98,46 @@ const location = "https://maps.app.goo.gl/Q11gmmDWxdkkQtKx5"
               <div>
                 <ThemeToggle />
               </div>
-              {isAdmin &&(
-              <div className="flex items-center ms-3">
-                <div>
-                  <button
-                    type="button"
-                    className="flex text-sm dark:bg-gray-800 bg-[#1985a1] p-2 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                    aria-expanded={isProfileDropdownOpen}
-                    onClick={() =>
-                      setIsProfileDropdownOpen(!isProfileDropdownOpen)
-                    }
-                  >
-                    <span className="sr-only">Open user menu</span>
-                    <FontAwesomeIcon
-                    icon={faUser}
-                      className="w-5 h-5 text-white rounded-full"
-                    />
-                  </button>
-                </div>
-                <div
-                  className={`z-50 ${
-                    isProfileDropdownOpen ? "" : "hidden"
-                  } absolute right-0 top-full mt-2 my-4 text-base list-none bg-[#dcdcdd] text-[#2a2d2f] divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600`}
-                  id="dropdown-user"
-                >
-                  <div className="px-4 py-3" role="none">
-                    <p className="text-sm inline-flex items-center dark:text-white" role="none">
-                      <FontAwesomeIcon icon={faUser} className="w-3 h-3 mx-1 p-1 bg-slate-200 rounded-full"/>
-                      {adminName}
-                    </p>
+              {isAuthenticated && (
+                <div className="flex items-center ms-3">
+                  <div>
+                    <button
+                      type="button"
+                      className="flex text-sm dark:bg-gray-800 bg-[#1985a1] p-2 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                      aria-expanded={isProfileDropdownOpen}
+                      onClick={() =>
+                        setIsProfileDropdownOpen(!isProfileDropdownOpen)
+                      }
+                    >
+                      <span className="sr-only">Open user menu</span>
+                      <FontAwesomeIcon
+                        icon={faUser}
+                        className="w-5 h-5 text-white rounded-full"
+                      />
+                    </button>
                   </div>
-                  <ul className="py-1" role="none">
-                    <li>
+                  <div
+                    className={`z-50 ${
+                      isProfileDropdownOpen ? "" : "hidden"
+                    } absolute right-0 top-full mt-2 my-4 text-base list-none bg-[#dcdcdd] text-[#2a2d2f] divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600`}
+                    id="dropdown-user"
+                  >
+                    <div className="px-4 py-3" role="none">
+                      <p
+                        className="text-sm inline-flex items-center dark:text-white"
+                        role="none"
+                      >
+                        <FontAwesomeIcon
+                          icon={faUser}
+                          className="w-3 h-3 mx-1 p-1 bg-slate-200 rounded-full"
+                        />
+                        {user.username}
+                      </p>
+                    </div>
+                    <ul className="py-1" role="none">
+                      {/* <li>
                       <a
-                        href="/"
+                        href="/app"
                         className="block px-4 py-2 text-[#4c5c68] text-sm  hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 hover:text-[#1985a1] dark:hover:text-white"
                         role="menuitem"
                       >
@@ -138,18 +152,20 @@ const location = "https://maps.app.goo.gl/Q11gmmDWxdkkQtKx5"
                       >
                         Settings
                       </a>
-                    </li>
-                    <li>
-                      <a
-                        className="block cursor-pointer px-4 py-2 text-[#4c5c68] text-sm hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 hover:text-[#1985a1] dark:hover:text-white"
-                        role="menuitem"
-                      >
-                        Sign out
-                      </a>
-                    </li>
-                  </ul>
+                    </li> */}
+                      <li>
+                        <a
+                          className="block cursor-pointer px-4 py-2 text-[#4c5c68] text-sm hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 hover:text-[#1985a1] dark:hover:text-white"
+                          role="menuitem"
+                          onClick={handleLogout}
+                        >
+                          Sign out
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
-              </div>)}
+              )}
             </div>
           </div>
         </div>
@@ -167,7 +183,7 @@ const location = "https://maps.app.goo.gl/Q11gmmDWxdkkQtKx5"
           <ul className="space-y-2 font-bold ">
             <li>
               <Link
-                to="/"
+                to="/app"
                 className="flex items-center rounded-lg w-full p-2  hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-gray-200 group"
               >
                 <FontAwesomeIcon
@@ -181,7 +197,7 @@ const location = "https://maps.app.goo.gl/Q11gmmDWxdkkQtKx5"
             </li>
             <li>
               <Link
-                to="/categories"
+                to="/app/categories"
                 className="flex items-center rounded-lg w-full p-2  hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-gray-200 group"
               >
                 <FontAwesomeIcon
@@ -195,7 +211,7 @@ const location = "https://maps.app.goo.gl/Q11gmmDWxdkkQtKx5"
             </li>
             <li>
               <Link
-                to="/offers"
+                to="/app/offers"
                 className="flex items-center rounded-lg w-full p-2  hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-gray-200 group"
               >
                 <FontAwesomeIcon
@@ -209,7 +225,7 @@ const location = "https://maps.app.goo.gl/Q11gmmDWxdkkQtKx5"
             </li>
             <li>
               <Link
-                to="/about"
+                to="/app/about"
                 className="flex items-center rounded-lg w-full p-2  hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-gray-200 group"
               >
                 <FontAwesomeIcon
